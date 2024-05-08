@@ -43,6 +43,7 @@ const parseResponse = async <T>(
         data,
       };
     } catch (error) {
+      console.log('Error: ', error);
       return Promise.reject({
         status: response.status,
         error: 'Invalid response',

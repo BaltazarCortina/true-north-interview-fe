@@ -6,3 +6,10 @@ export enum OperationType {
   SQUARE_ROOT = 'SQUARE_ROOT',
   RANDOM_STRING = 'RANDOM_STRING',
 }
+
+export interface NewOperation {
+  userId: string;
+  type: OperationType;
+  firstNumber: number;
+  secondNumber?: number;
+}
