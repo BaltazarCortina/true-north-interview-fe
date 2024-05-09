@@ -26,6 +26,7 @@ const useFirebaseAuth = () => {
   const authStateChanged = async (authState: User | null) => {
     if (!authState) {
       setAuthUser(null);
+      sessionStorage.removeItem('token');
       setLoading(false);
       return;
     }
@@ -33,6 +34,7 @@ const useFirebaseAuth = () => {
     setLoading(true);
     var formattedUser = formatAuthUser(authState);
     setAuthUser(formattedUser);
+    sessionStorage.setItem('token', await authState.getIdToken());
     setLoading(false);
   };
 
@@ -50,7 +52,8 @@ const useFirebaseAuth = () => {
     const auth = getAuth(firebaseApp);
     await firebaseSignOut(auth);
     setAuthUser(null);
-    setLoading(true);
+    sessionStorage.removeItem('token');
+    setLoading(false);
   };
 
   useEffect(() => {

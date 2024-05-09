@@ -31,15 +31,13 @@ const columns: { header: string; key: keyof ParsedRecord }[] = [
   },
 ];
 
-const userId = '663917cb3fbf6138ba79efa8'; // TODO: Replace with actual user id
-
 const Records = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { data, isPending } = useQuery({
     queryKey: ['records', page, rowsPerPage],
-    queryFn: () => getRecords(userId, page, rowsPerPage),
+    queryFn: () => getRecords(page, rowsPerPage),
     select: (data) => ({
       docs: parseRecords(data.data.docs),
       totalDocs: data.data.totalDocs,

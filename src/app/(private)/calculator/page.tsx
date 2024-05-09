@@ -47,7 +47,6 @@ const CalculatorPage = () => {
 
   const onSubmit: SubmitHandler<CalculatorFormValues> = async (formData) => {
     const body = {
-      userId: '663917cb3fbf6138ba79efa8', // TODO: use current user id
       type: formData.type,
       firstNumber: formData.firstNumber,
       secondNumber: formData.secondNumber,

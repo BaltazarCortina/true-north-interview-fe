@@ -1,11 +1,11 @@
 import { OperationResult, OperationResultSchema } from '@/schemas/operation';
-import { get, post } from './api';
+import { get, post } from '.';
 import { NewOperation } from '@/types/operation';
 import { PopulatedRecordListSchema, PopulatedRecordList } from '@/schemas/record';
 
-export const getRecords = async (userId: string, page: number, rowsPerPage: number) =>
+export const getRecords = async (page: number, rowsPerPage: number) =>
   get<PopulatedRecordList>(
-    `${process.env.NEXT_PUBLIC_API_URL}/records/${userId}?page=${page + 1}&limit=${rowsPerPage}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/records?page=${page + 1}&limit=${rowsPerPage}`,
     PopulatedRecordListSchema
   );
 

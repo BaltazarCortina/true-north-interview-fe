@@ -8,7 +8,6 @@ export enum OperationType {
 }
 
 export interface NewOperation {
-  userId: string;
   type: OperationType;
   firstNumber: number;
   secondNumber?: number;

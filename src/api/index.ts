@@ -1,4 +1,7 @@
+import { getAuth } from 'firebase/auth';
 import { ZodSchema } from 'zod';
+
+import firebaseApp from '@/lib/firebase';
 
 export interface APIResponse<T> {
   data: T;
@@ -7,11 +10,14 @@ export interface APIResponse<T> {
 }
 
 const getClient = async () => {
+  const token = await getAuth(firebaseApp).currentUser?.getIdToken();
+  const storedToken = sessionStorage.getItem('token') || '';
+
   return {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     timeout: 25000,
     headers: {
-      // authorization: token, // TODO: add after auth is implemented
+      authorization: token ?? storedToken,
       'Content-Type': 'application/json',
     },
   };
