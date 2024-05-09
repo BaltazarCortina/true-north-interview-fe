@@ -1,16 +1,18 @@
 'use client';
 
+import React, { PropsWithChildren } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
 
-interface Props {
-  children: React.ReactNode;
-}
+import { AuthUserProvider } from '@/lib/firebase/Provider';
 
-const Providers = ({ children }: Props) => {
+const Providers = ({ children }: PropsWithChildren) => {
   const queryClient = new QueryClient();
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthUserProvider>{children}</AuthUserProvider>
+    </QueryClientProvider>
+  );
 };
 
 export default Providers;
