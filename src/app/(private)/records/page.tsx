@@ -5,8 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getRecords } from '@/api/records';
 import DataTable from '@/components/Table';
-import { ParsedRecord } from '@/types/record';
-import { parseRecords } from '@/helpers/parsers';
+import { ParsedRecord, parseRecords } from '@/helpers/parsers';
 
 const columns: { header: string; key: keyof ParsedRecord }[] = [
   {
@@ -45,17 +44,20 @@ const Records = () => {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
-      <DataTable
-        columns={columns}
-        data={data?.docs}
-        isPending={isPending}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        setPage={setPage}
-        setRowsPerPage={setRowsPerPage}
-        totalRows={data?.totalDocs ?? 0}
-      />
+    <div className="flex flex-col items-center justify-center flex-grow px-8 bg-gray-900">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full">
+        <h1 className="text-2xl font-bold mb-8  text-gray-900">Records history</h1>
+        <DataTable
+          columns={columns}
+          data={data?.docs}
+          isPending={isPending}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          setPage={setPage}
+          setRowsPerPage={setRowsPerPage}
+          totalRows={data?.totalDocs ?? 0}
+        />
+      </div>
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { Record } from '@/schemas/record';
-import { ParsedRecord } from '@/types/record';
 
-export const parseRecords = (data: Record[]): ParsedRecord[] => {
+export const parseRecords = (data: Record[]) => {
   return data.map((record) => ({
+    id: record.id,
     date: record.date,
     type: record.operationId.type,
     result: record.operationResponse,
@@ -10,3 +10,5 @@ export const parseRecords = (data: Record[]): ParsedRecord[] => {
     balance: record.userBalance,
   }));
 };
+
+export type ParsedRecord = ReturnType<typeof parseRecords>[number];

@@ -4,21 +4,15 @@ import { useEffect, PropsWithChildren } from 'react';
 import { redirect } from 'next/navigation';
 
 import { useAuth } from '@/lib/firebase/Provider';
-import Header from '@/components/Header';
 
 const PrivateLayout = ({ children }: PropsWithChildren) => {
   const { authUser, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && !authUser) redirect('/');
+    if (!loading && authUser) redirect('/calculator');
   }, [authUser, loading]);
 
-  return (
-    <div className="h-screen flex flex-col">
-      <Header />
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 };
 
 export default PrivateLayout;

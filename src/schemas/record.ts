@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { OperationType } from '@/types/operation';
 
 export const RecordSchema = z.object({
+  id: z.string(),
   operationId: z.object({
     id: z.string(),
     type: z.nativeEnum(OperationType),

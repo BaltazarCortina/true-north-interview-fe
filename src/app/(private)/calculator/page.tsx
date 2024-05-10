@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@mui/material';
 
 import CustomInput from '@/components/CustomInput';
 import OperationButton from '@/components/OperationButton';
+import CustomButton from '@/components/CustomButton';
 import { OperationType } from '@/types/operation';
 import { postRecord } from '@/api/records';
 import { CalculatorFormSchema, CalculatorFormValues } from './schema';
@@ -60,7 +60,7 @@ const CalculatorPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex flex-col items-center justify-center flex-grow bg-gray-900">
       <form
         className="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl"
         onSubmit={handleSubmit(onSubmit)}
@@ -100,11 +100,13 @@ const CalculatorPage = () => {
             </OperationButton>
           ))}
         </div>
-        <div className="mt-4 space-y-2">
-          <p className="text-gray-700">{`Result: ${result ?? ''}`}</p>
+        <div className="mt-8 text-center">
+          <CustomButton type="submit" variant="secondary">
+            Calculate!
+          </CustomButton>
         </div>
-        <div className="mt-4 text-center">
-          <Button type="submit">Calculate!</Button>
+        <div className="mt-8 space-y-2">
+          <p className="text-gray-700">{`Result: ${result ?? ''}`}</p>
         </div>
       </form>
     </div>

@@ -81,7 +81,7 @@ export const post = async <T>(
 
 export const patch = async <T>(
   endpoint: string,
-  data: object,
+  data: object = {},
   Schema?: ZodSchema
 ): Promise<APIResponse<T>> => {
   const client = await getClient();
