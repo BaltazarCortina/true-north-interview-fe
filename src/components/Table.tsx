@@ -14,7 +14,6 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
-
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -105,7 +104,7 @@ const DataTable = <T extends Record<K, any>, K extends keyof T>({
   setPage,
   setRowsPerPage,
 }: DataTableProps<T, K>) => {
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
+  const emptyRows = page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
 
   const handleChangePage = (_event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -115,6 +114,8 @@ const DataTable = <T extends Record<K, any>, K extends keyof T>({
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const colSpan = columns.length + (actions?.length ? 1 : 0);
 
   return (
     <TableContainer component={Paper}>
@@ -130,7 +131,7 @@ const DataTable = <T extends Record<K, any>, K extends keyof T>({
         <TableBody>
           {isPending || !data ? (
             <TableRow style={{ height: 53 * rowsPerPage }}>
-              <TableCell colSpan={columns.length} align="center">
+              <TableCell colSpan={colSpan} align="center">
                 Loading data...
               </TableCell>
             </TableRow>
@@ -159,7 +160,9 @@ const DataTable = <T extends Record<K, any>, K extends keyof T>({
               ))}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={columns.length} />
+                  <TableCell align="center" colSpan={colSpan}>
+                    {!data.length ? 'There are no records' : ''}
+                  </TableCell>
                 </TableRow>
               )}
             </>
@@ -169,7 +172,7 @@ const DataTable = <T extends Record<K, any>, K extends keyof T>({
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
+              colSpan={colSpan}
               count={totalRows}
               rowsPerPage={rowsPerPage}
               page={page}

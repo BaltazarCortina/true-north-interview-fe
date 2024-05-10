@@ -9,16 +9,8 @@ import OperationButton from '@/components/OperationButton';
 import CustomButton from '@/components/CustomButton';
 import { OperationType } from '@/types/operation';
 import { postRecord } from '@/api/records';
+import { operations } from '@/helpers/constants';
 import { CalculatorFormSchema, CalculatorFormValues } from './schema';
-
-const operations = [
-  { type: OperationType.ADDITION, symbol: '+', label: 'Addition' },
-  { type: OperationType.SUBTRACTION, symbol: '-', label: 'Subtraction' },
-  { type: OperationType.MULTIPLICATION, symbol: 'x', label: 'Multiplication' },
-  { type: OperationType.DIVISION, symbol: '/', label: 'Division' },
-  { type: OperationType.SQUARE_ROOT, symbol: '√', label: 'Square Root' },
-  { type: OperationType.RANDOM_STRING, symbol: 'Random', label: 'Random String Generator' },
-];
 
 const CalculatorPage = () => {
   const [result, setResult] = useState<string | number>();
