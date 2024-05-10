@@ -41,6 +41,7 @@ const parseResponse = async <T>(
   if (!response.ok) {
     return Promise.reject({
       status: response.status,
+      error: res.error,
       message: res.message || 'An error occurred',
     });
   }

@@ -6,9 +6,3 @@ export enum OperationType {
   SQUARE_ROOT = 'SQUARE_ROOT',
   RANDOM_STRING = 'RANDOM_STRING',
 }
-
-export interface NewOperation {
-  type: OperationType;
-  firstNumber: number;
-  secondNumber?: number;
-}

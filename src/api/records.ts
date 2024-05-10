@@ -1,7 +1,7 @@
 import { OperationResult, OperationResultSchema } from '@/schemas/operation';
 import { get, patch, post } from '.';
-import { NewOperation } from '@/types/operation';
 import { PopulatedRecordListSchema, PopulatedRecordList } from '@/schemas/record';
+import { CalculatorFormValues } from '@/app/(private)/calculator/schema';
 
 export const getRecords = async (
   page: number,
@@ -16,7 +16,7 @@ export const getRecords = async (
   );
 };
 
-export const postRecord = async (body: NewOperation) =>
+export const postRecord = async (body: CalculatorFormValues) =>
   post<OperationResult>(`${process.env.NEXT_PUBLIC_API_URL}/records`, body, OperationResultSchema);
 
 export const deleteRecord = async (id: string) =>

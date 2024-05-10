@@ -14,7 +14,7 @@ const Home = () => {
           <Link className={getButtonStyles('primary')} href="/sign-in">
             Log In
           </Link>
-          <Link className={getButtonStyles('secondary')} href="#">
+          <Link className={getButtonStyles('secondary')} href="/sign-up">
             Sign Up
           </Link>
         </div>

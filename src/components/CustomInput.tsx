@@ -9,6 +9,7 @@ interface CustomInputProps<T extends FieldValues> {
   type?: string;
   variant?: 'standard' | 'filled' | 'outlined';
   error?: any;
+  disabled?: boolean;
 }
 
 const CustomInput = <T extends FieldValues>({
@@ -19,6 +20,7 @@ const CustomInput = <T extends FieldValues>({
   type,
   variant = 'standard',
   placeholder,
+  disabled,
 }: CustomInputProps<T>) => {
   return (
     <div className="flex flex-col space-y-2 w-full">
@@ -28,6 +30,7 @@ const CustomInput = <T extends FieldValues>({
         placeholder={placeholder}
         type={type || 'text'}
         variant={variant}
+        disabled={disabled}
         {...register(name)}
       />
       {error && <span className="text-red-700 text-xs">{error.message}</span>}

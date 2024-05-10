@@ -6,9 +6,10 @@ import { useMutation } from '@tanstack/react-query';
 import { Alert } from '@mui/material';
 
 import CustomInput from '@/components/CustomInput';
-import { useAuth } from '@/lib/firebase/Provider';
 import CustomButton from '@/components/CustomButton';
-import { SignInFormSchema, SignInFormValues } from './schema';
+import { SignUpFormSchema, SignUpFormValues } from './schema';
+import { createUser } from '@/api/auth';
+import { useAuth } from '@/lib/firebase/Provider';
 
 const CalculatorPage = () => {
   const { signIn } = useAuth();
@@ -17,17 +18,22 @@ const CalculatorPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignInFormValues>({
+  } = useForm<SignUpFormValues>({
     mode: 'onBlur',
-    resolver: zodResolver(SignInFormSchema),
+    resolver: zodResolver(SignUpFormSchema),
   });
 
   const { mutate, isPending, error, isError } = useMutation({
-    mutationFn: (formData: SignInFormValues) => signIn(formData.email, formData.password),
+    mutationFn: createUser,
+    onSuccess: (_data, variables) => signIn(variables.email, variables.password),
   });
 
-  const onSubmit: SubmitHandler<SignInFormValues> = (formData) => {
-    mutate(formData);
+  const onSubmit: SubmitHandler<SignUpFormValues> = (formData) => {
+    const newUser = {
+      email: formData.email,
+      password: formData.password,
+    };
+    mutate(newUser);
   };
 
   return (
@@ -36,9 +42,7 @@ const CalculatorPage = () => {
         className="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className="text-2xl font-bold mb-8 text-center text-gray-900">
-          Sign in to your account
-        </h1>
+        <h1 className="text-2xl font-bold mb-8 text-center text-gray-900">Create an account</h1>
         <div className="flex flex-col items-center gap-4 max-w-72 mx-auto">
           <CustomInput
             label="Email"
@@ -56,10 +60,18 @@ const CalculatorPage = () => {
             type="password"
             disabled={isPending}
           />
+          <CustomInput
+            label="Repeat password"
+            name="repeatPassword"
+            register={register}
+            error={errors.repeatPassword}
+            type="password"
+            disabled={isPending}
+          />
         </div>
         <div className="mt-8 text-center">
           <CustomButton type="submit" variant="secondary" disabled={isPending}>
-            Sign in!
+            Sign up!
           </CustomButton>
         </div>
         {!isPending && isError && (
