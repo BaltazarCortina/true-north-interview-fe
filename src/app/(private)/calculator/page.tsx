@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 
 import CustomInput from '@/components/CustomInput';
 import OperationButton from '@/components/OperationButton';
@@ -11,22 +12,26 @@ import { OperationType } from '@/types/operation';
 import { postRecord } from '@/api/records';
 import { operations } from '@/helpers/constants';
 import { CalculatorFormSchema, CalculatorFormValues } from './schema';
+import { Alert } from '@mui/material';
 
 const CalculatorPage = () => {
-  const [result, setResult] = useState<string | number>();
-
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
     setValue,
+    clearErrors,
   } = useForm<CalculatorFormValues>({
     mode: 'onBlur',
     resolver: zodResolver(CalculatorFormSchema),
   });
 
   const operationType = watch('type');
+
+  const { mutate, isPending, error, isError, data } = useMutation({
+    mutationFn: postRecord,
+  });
 
   useEffect(() => {
     if (
@@ -37,19 +42,16 @@ const CalculatorPage = () => {
     }
   }, [operationType, setValue]);
 
-  const onSubmit: SubmitHandler<CalculatorFormValues> = async (formData) => {
+  const onSubmit: SubmitHandler<CalculatorFormValues> = (formData) => {
     const body = {
       type: formData.type,
       firstNumber: formData.firstNumber,
       secondNumber: formData.secondNumber,
     };
-    try {
-      const response = await postRecord(body);
-      setResult(response.data);
-    } catch {
-      console.log('Error'); // TODO: handle error
-    }
+    mutate(body);
   };
+
+  const isValid = Object.keys(errors).length === 0;
 
   return (
     <div className="flex flex-col items-center justify-center flex-grow bg-gray-900">
@@ -83,7 +85,10 @@ const CalculatorPage = () => {
           {operations.map(({ type, symbol, label }) => (
             <OperationButton
               selected={operationType}
-              setOperation={(operation) => setValue('type', operation)}
+              setOperation={(operation) => {
+                setValue('type', operation);
+                clearErrors('type');
+              }}
               type={type}
               key={type}
               label={label}
@@ -91,15 +96,28 @@ const CalculatorPage = () => {
               {symbol}
             </OperationButton>
           ))}
+          {errors.type && <span className="text-red-700 text-xs">{errors.type.message}</span>}
         </div>
         <div className="mt-8 text-center">
-          <CustomButton type="submit" variant="secondary">
+          <CustomButton type="submit" variant="secondary" disabled={!isValid} loading={isPending}>
             Calculate!
           </CustomButton>
         </div>
-        <div className="mt-8 space-y-2">
-          <p className="text-gray-700">{`Result: ${result ?? ''}`}</p>
-        </div>
+        {!isPending && !isError && data && (
+          <div className="mt-8 space-y-2">
+            <Alert severity="success">
+              {'The result of this operation is: '}
+              <span className="font-bold ml-1">{data.data}</span>
+            </Alert>
+          </div>
+        )}
+        {!isPending && isError && (
+          <div className="mt-8 space-y-2">
+            <Alert severity="error">
+              {error.message || 'An error occurred while processing the operation.'}
+            </Alert>
+          </div>
+        )}
       </form>
     </div>
   );

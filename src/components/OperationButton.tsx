@@ -1,5 +1,6 @@
 import { OperationType } from '@/types/operation';
-import { Button } from '@mui/material';
+import { getButtonStyles } from './CustomButton';
+import { MouseEvent } from 'react';
 
 interface OperationButtonProps {
   selected: OperationType | undefined;
@@ -16,15 +17,17 @@ const OperationButton = ({
   children,
   label,
 }: OperationButtonProps) => {
+  const variant = selected === type ? 'secondary' : 'primary';
+
+  const handleClick = (e: MouseEvent) => {
+    e.preventDefault();
+    setOperation(type);
+  };
+
   return (
-    <Button
-      variant={selected === type ? 'text' : 'outlined'}
-      onClick={() => setOperation(type)}
-      className={selected === type ? 'bg-gray-200' : ''}
-      title={label}
-    >
+    <button className={getButtonStyles(variant)} onClick={handleClick} title={label}>
       {children}
-    </Button>
+    </button>
   );
 };
 

@@ -29,7 +29,7 @@ const CalculatorPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-900">
       <form
         className="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl"
         onSubmit={handleSubmit(onSubmit)}

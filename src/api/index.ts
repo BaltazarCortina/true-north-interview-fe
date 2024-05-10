@@ -29,15 +29,19 @@ const parseResponse = async <T>(
 ): Promise<APIResponse<T>> => {
   let res;
   try {
-    if (!response.ok) {
-      throw new Error();
-    }
     res = await response.json();
   } catch (error) {
     return Promise.reject({
       status: response.status,
-      error: response.statusText,
+      error,
       message: `${response.status} ${response.statusText}`,
+    });
+  }
+
+  if (!response.ok) {
+    return Promise.reject({
+      status: response.status,
+      message: res.message || 'An error occurred',
     });
   }
 
@@ -49,10 +53,9 @@ const parseResponse = async <T>(
         data,
       };
     } catch (error) {
-      console.log('Error: ', error);
       return Promise.reject({
         status: response.status,
-        error: 'Invalid response',
+        error,
         message: 'Response does not match the expected schema',
       });
     }

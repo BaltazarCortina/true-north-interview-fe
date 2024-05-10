@@ -1,4 +1,4 @@
-import { FormLabel, Input } from '@mui/material';
+import { FormLabel, TextField } from '@mui/material';
 import { UseFormRegister, FieldValues, Path } from 'react-hook-form';
 
 interface CustomInputProps<T extends FieldValues> {
@@ -7,6 +7,7 @@ interface CustomInputProps<T extends FieldValues> {
   name: Path<T>;
   placeholder?: string;
   type?: string;
+  variant?: 'standard' | 'filled' | 'outlined';
   error?: any;
 }
 
@@ -16,12 +17,19 @@ const CustomInput = <T extends FieldValues>({
   name,
   error,
   type,
+  variant = 'standard',
   placeholder,
 }: CustomInputProps<T>) => {
   return (
     <div className="flex flex-col space-y-2 w-full">
       <FormLabel htmlFor={name}>{label}</FormLabel>
-      <Input id={name} placeholder={placeholder} type={type || 'text'} {...register(name)} />
+      <TextField
+        id={name}
+        placeholder={placeholder}
+        type={type || 'text'}
+        variant={variant}
+        {...register(name)}
+      />
       {error && <span className="text-red-700 text-xs">{error.message}</span>}
     </div>
   );

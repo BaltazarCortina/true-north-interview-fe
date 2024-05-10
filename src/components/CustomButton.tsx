@@ -1,8 +1,10 @@
 export const getButtonStyles = (variant: ButtonVariant) => {
   const buttonVariants = {
-    primary: 'text-gray-900 bg-gray-50 rounded-md hover:bg-gray-200',
+    primary: 'text-gray-900 bg-gray-100 rounded-md hover:bg-gray-200',
     secondary:
       'text-gray-100 bg-gray-950 rounded-md border border-gray-200 border-gray-800 hover:bg-gray-800',
+    disabled:
+      'text-gray-100 bg-gray-600 rounded-md border border-gray-200 border-gray-800 cursor-not-allowed',
   };
 
   const baseStyle =
@@ -13,16 +15,18 @@ export const getButtonStyles = (variant: ButtonVariant) => {
   return `${baseStyle} ${variantStyle}`;
 };
 
-type ButtonVariant = 'primary' | 'secondary';
+type ButtonVariant = 'primary' | 'secondary' | 'disabled';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   children: React.ReactNode;
+  loading?: boolean;
 }
 
-const CustomButton = ({ variant = 'primary', children, ...rest }: Props) => {
+const CustomButton = ({ variant = 'primary', children, loading, ...rest }: Props) => {
+  const disabled = rest.disabled || loading;
   return (
-    <button className={getButtonStyles(variant)} {...rest}>
+    <button className={getButtonStyles(disabled ? 'disabled' : variant)} {...rest}>
       {children}
     </button>
   );
