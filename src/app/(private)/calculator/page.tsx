@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { Alert } from '@mui/material';
 
 import CustomInput from '@/components/CustomInput';
 import OperationButton from '@/components/OperationButton';
@@ -12,7 +13,6 @@ import { OperationType } from '@/types/operation';
 import { postRecord } from '@/api/records';
 import { operations } from '@/helpers/constants';
 import { CalculatorFormSchema, CalculatorFormValues } from './schema';
-import { Alert } from '@mui/material';
 
 const CalculatorPage = () => {
   const {

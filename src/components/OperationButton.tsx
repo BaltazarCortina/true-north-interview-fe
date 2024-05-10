@@ -1,6 +1,7 @@
+import { MouseEvent } from 'react';
+
 import { OperationType } from '@/types/operation';
 import { getButtonStyles } from './CustomButton';
-import { MouseEvent } from 'react';
 
 interface OperationButtonProps {
   selected: OperationType | undefined;

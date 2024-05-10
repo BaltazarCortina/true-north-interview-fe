@@ -4,7 +4,7 @@ Frontend for an Arithmetic Calculator App.
 
 ## Preview
 
-A preview deployment of this project can be found in [true-north-interview-fe.vercel.app](https://true-north-interview-fe.vercel.app/).
+A preview deployment of this project can be found [here](https://true-north-interview-fe.vercel.app/).
 
 ## Run the project
 
