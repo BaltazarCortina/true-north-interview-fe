@@ -76,9 +76,16 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
+interface TableAction<T> {
+  label: string;
+  icon: JSX.Element;
+  onClick: (row: T) => void;
+}
+
 interface DataTableProps<T extends Record<K, any>, K extends keyof T> {
   columns: { header: string; key: K & string }[];
   data?: T[];
+  actions?: TableAction<T>[];
   isPending: boolean;
   totalRows: number;
   page: number;
@@ -90,6 +97,7 @@ interface DataTableProps<T extends Record<K, any>, K extends keyof T> {
 const DataTable = <T extends Record<K, any>, K extends keyof T>({
   data,
   columns,
+  actions,
   isPending,
   totalRows,
   page,
@@ -116,27 +124,42 @@ const DataTable = <T extends Record<K, any>, K extends keyof T>({
             {columns.map((column) => (
               <TableCell key={column.key}>{column.header}</TableCell>
             ))}
+            {actions?.length && <TableCell align="center">Actions</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
           {isPending || !data ? (
             <TableRow style={{ height: 53 * rowsPerPage }}>
-              <TableCell colSpan={6} align="center">
+              <TableCell colSpan={columns.length} align="center">
                 Loading data...
               </TableCell>
             </TableRow>
           ) : (
             <>
               {data.map((row, index) => (
-                <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableRow
+                  key={`row-${index}`}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
                   {columns.map((column) => (
                     <TableCell key={column.key}>{row[column.key]}</TableCell>
                   ))}
+                  <TableCell align="center" style={{ padding: 0 }}>
+                    {actions?.map((action, index) => (
+                      <IconButton
+                        title={action.label}
+                        key={`action-${index}`}
+                        onClick={() => action.onClick(row)}
+                      >
+                        {action.icon}
+                      </IconButton>
+                    ))}
+                  </TableCell>
                 </TableRow>
               ))}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={columns.length} />
                 </TableRow>
               )}
             </>

@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Delete } from '@mui/icons-material';
 
-import { getRecords } from '@/api/records';
+import { deleteRecord, getRecords } from '@/api/records';
 import DataTable from '@/components/Table';
 import { ParsedRecord, parseRecords } from '@/helpers/parsers';
 
@@ -34,7 +35,7 @@ const Records = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { data, isPending } = useQuery({
+  const { data, isPending, refetch } = useQuery({
     queryKey: ['records', page, rowsPerPage],
     queryFn: () => getRecords(page, rowsPerPage),
     select: (data) => ({
@@ -43,6 +44,19 @@ const Records = () => {
     }),
   });
 
+  const { mutate, isPending: isPendingDelete } = useMutation({
+    mutationFn: deleteRecord,
+    onSettled: async () => await refetch(),
+  });
+
+  const actions = [
+    {
+      label: 'Delete',
+      icon: <Delete />,
+      onClick: async (record: ParsedRecord) => mutate(record.id),
+    },
+  ];
+
   return (
     <div className="flex flex-col items-center justify-center flex-grow px-8 bg-gray-900">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full">
@@ -50,7 +64,8 @@ const Records = () => {
         <DataTable
           columns={columns}
           data={data?.docs}
-          isPending={isPending}
+          actions={actions}
+          isPending={isPending || isPendingDelete}
           page={page}
           rowsPerPage={rowsPerPage}
           setPage={setPage}
